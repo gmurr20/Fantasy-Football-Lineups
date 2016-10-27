@@ -41,6 +41,20 @@ def getProjectedFromNFL(n):
 		url = nflUrl+nextPage
 	return nflPlayers
 
+def getFoxProjected(playerInfo, nflPlayers):
+	for info in playerInfo:
+		name = ""
+		pts = -1000.0
+		player = info.find_all("a", {"class": "wis_playerProfileLink"})
+		if len(player) > 0:
+			name = player[0].text
+		projected = info.find_all("td", {"class": "wis_col_highlight"})
+		if len(projected) > 0:
+			pts = float(projected[0].text)
+		if name != "" and pts != -1000.0:
+			nflPlayers[name] = pts
+			print name, pts
+
 def getProjectedFromFox(n):
 	url =""+foxUrl
 	nflPlayers = {}
@@ -48,23 +62,13 @@ def getProjectedFromFox(n):
 		r = requests.get(url)
 		soup = BeautifulSoup(r.content, "html.parser")
 		playerInfo = soup.find_all("tr")
-		for info in playerInfo:
-			name = ""
-			pts = -1000.0
-			player = info.find_all("a", {"class": "wis_playerProfileLink"})
-			if len(player) > 0:
-				name = player[0].text
-			projected = info.find_all("td", {"class": "wis_col_highlight"})
-			if len(projected) > 0:
-				pts = float(projected[0].text)
-			if name != "" and pts != -1000.0:
-				nflPlayers[name] = pts
-				print name, pts
+		getFoxProjected(playerInfo, nflPlayers)
 		nextLink = soup.find_all("a", {"class": "wis_nextPageLink"})
 		try:
-			nextPage = nextLink[0].find_all("a")[0].get("href")
+			nextPage = nextLink[0].get("href")
 		except:
 			print "Next page not found... Awkward"
 			break
 		url = foxUrl+nextPage
 	return nflPlayers
+
