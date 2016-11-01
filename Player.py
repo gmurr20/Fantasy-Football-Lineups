@@ -14,10 +14,8 @@ class Player:
 		self.position = position
 		self.projected_pts = projected_pts
 
-	def setPoints(points):
+	def setPoints(self, points):
 		self.projected_pts = points
 
-	def printPlayer(self):
-		print self.name, self.position, self.team
-		print "Salary:\t\t", self.salary
-		print "Projected:\t", self.projected_pts
+	def __str__(self):
+		return "{} {} {} {}".format(self.name, self.position, self.salary, self.projected_pts)
