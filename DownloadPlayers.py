@@ -21,8 +21,3 @@ def DownloadPlayers(fileName):
 			newPlayer = Player(salary, name, team, position, projected)
 			allEligiblePlayers[name] = newPlayer
 	return allEligiblePlayers
-
-
-
-
-
